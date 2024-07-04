@@ -1,16 +1,36 @@
 "use client";
 import { apis } from "@/api";
 import { TodoSchema } from "@/types/todo";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 
 type Todo = z.infer<typeof TodoSchema>;
 
 export default function Home() {
+  const queryClient = useQueryClient();
+
   const { data } = useQuery<Todo[]>({
     queryKey: ['todos'], queryFn: apis.todo.getTodos
   })
-  
+
+  const deleteTodoMutation = useMutation({
+    mutationFn: apis.todo.deleteTodo,
+  });
+
+  const handleDeleteTodo = (id: string) => {
+    console.log('delete', id)
+    deleteTodoMutation.mutate(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ['todos']
+        });
+      },
+      onError: (error: any) => {
+        console.error('Error deleting todo:', error);
+      }
+    });
+  }
+
   return (
     <div className="bg-orange-200 flex justify-center items-center h-screen">
       <div className="container w-full max-w-2xl">
@@ -61,7 +81,7 @@ export default function Home() {
                         </button>
                       }
 
-                      <button className="text-orange-600">
+                      <button onClick={() => handleDeleteTodo(todo.id)} className="text-orange-600">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
