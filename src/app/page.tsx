@@ -2,11 +2,14 @@
 import { apis } from "@/api";
 import { TodoSchema } from "@/types/todo";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { z } from "zod";
 
 type Todo = z.infer<typeof TodoSchema>;
 
 export default function Home() {
+  const [todo, setTodo] = useState('');
+
   const queryClient = useQueryClient();
 
   const { data } = useQuery<Todo[]>({
@@ -18,7 +21,6 @@ export default function Home() {
   });
 
   const handleDeleteTodo = (id: string) => {
-    console.log('delete', id)
     deleteTodoMutation.mutate(id, {
       onSuccess: () => {
         queryClient.invalidateQueries({
@@ -31,13 +33,33 @@ export default function Home() {
     });
   }
 
+  const createTodoMutation = useMutation({
+    mutationFn: apis.todo.createTodo,
+  });
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    createTodoMutation.mutate({ todo }, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ['todos']
+        });
+      },
+      onError: (error: any) => {
+        console.error('Error creating todo:', error);
+      }
+    });
+  }
+
+
+
   return (
     <div className="bg-orange-200 flex justify-center items-center h-screen">
       <div className="container w-full max-w-2xl">
         <div className="text-3xl text-center font-bold mb-3 uppercase">Todo List</div>
         {/* Form input */}
-        <form className="flex justify-center">
-          <input type="text" name="todo" placeholder="Enter Todo" className="text-xl text-orange-800 placeholder-orange-400 py-2 px-5 bg-orange-100 rounded-l-full outline-orange-300" />
+        <form className="flex justify-center" onSubmit={handleSubmit}>
+          <input type="text" name="todo" placeholder="Enter Todo" className="text-xl text-orange-800 placeholder-orange-400 py-2 px-5 bg-orange-100 rounded-l-full outline-orange-300" value={todo} onChange={(e) => setTodo(e.target.value)} />
           <button type="submit" className="text-xl text-orange-100 placeholder-orange-400 py-2 pr-5 pl-4 bg-orange-500 rounded-r-full">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
