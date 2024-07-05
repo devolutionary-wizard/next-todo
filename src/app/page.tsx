@@ -111,6 +111,7 @@ export default function Home() {
 
         <div className="bg-gray-100 mt-5 p-5 rounded-xl shadow-lg text-gray-700">
           <h1 className="font-bold text-xl italic block mb-0 leading-none">Todo&apos;s</h1>
+          <small className="block mb-5 mt-0 text-xs text-gray-500">{data?.filter((todo: any) => !todo.isCompleted).length} Todos pending, {data?.filter((todo: any) => todo.isCompleted).length} Completed.</small>
           <div className="max-h-80 overflow-y-auto">
             <table className="table w-full">
               <thead>
@@ -134,7 +135,7 @@ export default function Home() {
                     )}
 
                     {Array.isArray(data) && data.map((todo: TodoType, index) => (
-                      <tr key={index}>
+                      <tr key={index} className={`${!todo.isCompleted ? 'odd:bg-orange-100 even:bg-orange-50 transition duration-300' : 'bg-green-100 line-through'}`}>
                         <td className="text-center px-1 py-2 text-orange-800">{index + 1}</td>
                         <td className="px-1 py-2 text-orange-800">{todo.todo}</td>
                         <td className="text-center px-1 py-2 text-orange-800 flex gap-3 justify-start">
