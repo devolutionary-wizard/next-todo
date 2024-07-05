@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const Todo = z.object({
-    todo: z.string().min(1,""),
+    todo: z.string().min(1, ""),
     isCompleted: z.boolean().default(false),
 });
 
@@ -10,3 +10,5 @@ export const TodoSchema = Todo.extend({
 });
 
 export const UpdateTodoSchema = Todo.partial();
+
+export type TodoType = z.infer<typeof TodoSchema>;

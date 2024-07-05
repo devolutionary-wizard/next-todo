@@ -1,19 +1,17 @@
 "use client";
 import { apis } from "@/api";
-import { TodoSchema } from "@/types/todo";
+import { TodoType } from "@/types/todo";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast, Toaster } from "sonner";
-import { z } from "zod";
 
-type Todo = z.infer<typeof TodoSchema>;
 
 export default function Home() {
   const [todo, setTodo] = useState('');
 
   const queryClient = useQueryClient();
 
-  const { data } = useQuery<Todo[]>({
+  const { data, isLoading: } = useQuery<TodoType[]>({
     queryKey: ['todos'], queryFn: apis.todo.getTodos
   })
 
@@ -77,6 +75,23 @@ export default function Home() {
     });
   }
 
+  const updateTodoMutation = useMutation(
+    { mutationFn: ({ id, data }: { id: string; data: TodoType }) => apis.todo.updateTodo(id, data) }
+  );
+
+  const handleUpdateTodo = (id: string, data: any) => {
+    updateTodoMutation.mutate({ id, data }, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ['todos']
+        });
+        toast.success('Todo updated successfully');
+      },
+      onError: (error: any) => {
+        toast.error('Error updating todo');
+      }
+    });
+  }
 
   return (
     <div className="bg-orange-200 flex justify-center items-center h-screen">
@@ -110,7 +125,7 @@ export default function Home() {
                     <td className="text-center px-1 py-2 text-orange-800" colSpan={3}>No Todos found. Add a few to begin.</td>
                   </tr>
                 }
-                {Array.isArray(data) && data.map((todo: Todo, index) => (
+                {Array.isArray(data) && data.map((todo: TodoType, index) => (
                   <tr key={index}>
                     <td className="text-center px-1 py-2 text-orange-800">{index + 1}</td>
                     <td className=" px-1 py-2 text-orange-800">{todo.todo}</td>
