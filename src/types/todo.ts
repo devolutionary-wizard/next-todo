@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const Todo = z.object({
-    todo: z.string(),
+    todo: z.string().min(1,""),
     isCompleted: z.boolean().default(false),
 });
 
