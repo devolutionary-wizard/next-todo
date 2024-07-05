@@ -3,6 +3,7 @@ import { apis } from "@/api";
 import { TodoSchema } from "@/types/todo";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { toast, Toaster } from "sonner";
 import { z } from "zod";
 
 type Todo = z.infer<typeof TodoSchema>;
@@ -26,9 +27,10 @@ export default function Home() {
         queryClient.invalidateQueries({
           queryKey: ['todos']
         });
+        toast.success('Todo deleted successfully');
       },
       onError: (error: any) => {
-        console.error('Error deleting todo:', error);
+        toast.error('Error deleting todo');
       }
     });
   }
@@ -39,14 +41,20 @@ export default function Home() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!todo.trim()) {
+      toast.error('Todo cannot be empty');
+      return;
+    }
     createTodoMutation.mutate({ todo }, {
       onSuccess: () => {
         queryClient.invalidateQueries({
           queryKey: ['todos']
         });
+        console.log('Todo added successfully');
+        toast.success('Todo added successfully');
       },
       onError: (error: any) => {
-        console.error('Error creating todo:', error);
+        toast.error('Error creating todo');
       }
     });
   }
@@ -54,6 +62,7 @@ export default function Home() {
 
   return (
     <div className="bg-orange-200 flex justify-center items-center h-screen">
+      <Toaster />
       <div className="container w-full max-w-2xl">
         <div className="text-3xl text-center font-bold mb-3 uppercase">Todo List</div>
         {/* Form input */}
