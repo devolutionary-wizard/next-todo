@@ -50,7 +50,7 @@ export default function Home() {
         queryClient.invalidateQueries({
           queryKey: ['todos']
         });
-        console.log('Todo added successfully');
+        setTodo('');
         toast.success('Todo added successfully');
       },
       onError: (error: any) => {
