@@ -11,7 +11,7 @@ export default function Home() {
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading: } = useQuery<TodoType[]>({
+  const { data, isLoading: isFetchingTodo } = useQuery<TodoType[]>({
     queryKey: ['todos'], queryFn: apis.todo.getTodos
   })
 
@@ -93,6 +93,7 @@ export default function Home() {
     });
   }
 
+
   return (
     <div className="bg-orange-200 flex justify-center items-center h-screen">
       <Toaster />
@@ -120,38 +121,48 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                {data?.length == 0 &&
+                {isFetchingTodo ? (
                   <tr>
-                    <td className="text-center px-1 py-2 text-orange-800" colSpan={3}>No Todos found. Add a few to begin.</td>
+                    <td className="text-center" colSpan={3}>Loading...</td>
                   </tr>
-                }
-                {Array.isArray(data) && data.map((todo: TodoType, index) => (
-                  <tr key={index}>
-                    <td className="text-center px-1 py-2 text-orange-800">{index + 1}</td>
-                    <td className=" px-1 py-2 text-orange-800">{todo.todo}</td>
-                    <td className="text-center  px-1 py-2 text-orange-800 flex gap-3 justify-start">
-                      {!todo.isCompleted && <button onClick={() => handleMarkTodoAsComplete(todo.id)} className="text-center  px-1 py-2 text-orange-800 flex gap-3 justify-start">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                      </button>
-                      }
-                      {todo.isCompleted &&
-                        <button onClick={() => handleMarkTodoAsComplete(todo.id)} className="text-orange-600">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
-                      }
+                ) : (
+                  <>
+                    {data?.length === 0 && (
+                      <tr>
+                        <td className="text-center px-1 py-2 text-orange-800" colSpan={3}>No Todos found. Add a few to begin.</td>
+                      </tr>
+                    )}
 
-                      <button onClick={() => handleDeleteTodo(todo.id)} className="text-orange-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                    {Array.isArray(data) && data.map((todo: TodoType, index) => (
+                      <tr key={index}>
+                        <td className="text-center px-1 py-2 text-orange-800">{index + 1}</td>
+                        <td className="px-1 py-2 text-orange-800">{todo.todo}</td>
+                        <td className="text-center px-1 py-2 text-orange-800 flex gap-3 justify-start">
+                          {!todo.isCompleted && (
+                            <button onClick={() => handleMarkTodoAsComplete(todo.id)} className="text-center px-1 py-2 text-orange-800 flex gap-3 justify-start">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </button>
+                          )}
+                          {todo.isCompleted && (
+                            <button onClick={() => handleMarkTodoAsComplete(todo.id)} className="text-orange-600">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          )}
+
+                          <button onClick={() => handleDeleteTodo(todo.id)} className="text-orange-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </>
+                )}
               </tbody>
             </table>
           </div>
