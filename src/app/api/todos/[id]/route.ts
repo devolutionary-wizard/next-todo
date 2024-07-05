@@ -19,3 +19,17 @@ export function PUT(req: Request, { params }: { params: { id: string } }) {
                 .then(response => Response.json({ status: "success", data: response }));
         }).catch(error => new Response(JSON.stringify({ status: "error", message: (error as Error).message, })));
 }
+
+export function PATCH(req: Request, { params }: { params: { id: string } }) {
+    return db.select()
+        .from(todos)
+        .where(eq(todos.id, params.id))
+        .then(res => {
+            const [todo] = res;
+            return db.update(todos)
+                .set({ isCompleted: !todo.isCompleted })
+                .where(eq(todos.id, params.id))
+                .then(() => Response.json({ status: "success", message: "Todo updated successfully" }))
+                .catch(error => Response.json({ status: "error", message: (error as Error).message, }));
+        }).catch(error => Response.json({ status: "error", message: (error as Error).message, }));
+}

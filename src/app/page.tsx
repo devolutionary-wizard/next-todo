@@ -59,6 +59,24 @@ export default function Home() {
     });
   }
 
+  const markTodoAsCompleteMutation = useMutation({
+    mutationFn: apis.todo.toggleTodoCompletion,
+  });
+
+  const handleMarkTodoAsComplete = (id: string) => {
+    markTodoAsCompleteMutation.mutate(id, {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries({
+          queryKey: ['todos']
+        });
+        toast.success(data);
+      },
+      onError: (error: any) => {
+        toast.error('Error marking todo as complete');
+      }
+    });
+  }
+
 
   return (
     <div className="bg-orange-200 flex justify-center items-center h-screen">
@@ -97,14 +115,14 @@ export default function Home() {
                     <td className="text-center px-1 py-2 text-orange-800">{index + 1}</td>
                     <td className=" px-1 py-2 text-orange-800">{todo.todo}</td>
                     <td className="text-center  px-1 py-2 text-orange-800 flex gap-3 justify-start">
-                      {!todo.isCompleted && <button className="text-center  px-1 py-2 text-orange-800 flex gap-3 justify-start">
+                      {!todo.isCompleted && <button onClick={() => handleMarkTodoAsComplete(todo.id)} className="text-center  px-1 py-2 text-orange-800 flex gap-3 justify-start">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
                       </button>
                       }
                       {todo.isCompleted &&
-                        <button className="text-orange-600">
+                        <button onClick={() => handleMarkTodoAsComplete(todo.id)} className="text-orange-600">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                           </svg>
