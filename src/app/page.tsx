@@ -52,7 +52,6 @@ export default function Home() {
   }
 
 
-
   return (
     <div className="bg-orange-200 flex justify-center items-center h-screen">
       <div className="container w-full max-w-2xl">
@@ -84,7 +83,7 @@ export default function Home() {
                     <td className="text-center px-1 py-2 text-orange-800" colSpan={3}>No Todos found. Add a few to begin.</td>
                   </tr>
                 }
-                {data?.map((todo: Todo, index) => (
+                {Array.isArray(data) && data.map((todo: Todo, index) => (
                   <tr key={index}>
                     <td className="text-center px-1 py-2 text-orange-800">{index + 1}</td>
                     <td className=" px-1 py-2 text-orange-800">{todo.todo}</td>
