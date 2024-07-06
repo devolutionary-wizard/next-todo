@@ -13,7 +13,7 @@ export function DELETE(req: Request, { params }: { params: { id: string } }) {
 export function PUT(req: Request, { params }: { params: { id: string } }) {
     return req.json()
         .then(updatedTodoData => {
-            const data = UpdateTodoSchema.parse(updatedTodoData);
+            const data = UpdateTodoSchema.parse({ todo: updatedTodoData });
             return db.update(todos).set(data)
                 .where(eq(todos.id, params.id))
                 .then(response => Response.json({ status: "success", data: response }));
