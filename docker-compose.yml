@@ -14,3 +14,11 @@ services:
       - "MYSQL_COLLATION_SERVER=utf8mb4_general_ci"
     volumes:
       - ./docker/mysql/data:/var/lib/mysql
+  app:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
