@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Todo application
 
-## Getting Started
+## Description
 
-First, run the development server:
+This is a Todo application built with Next.js, React, and TypeScript. It allows users to manage their tasks efficiently with features like adding, editing, and deleting todos. The application uses MySQL for data storage and integrates with various libraries such as Axios for HTTP requests, Drizzle ORM for database interactions, and TailwindCSS for styling.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Motivation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The motivation behind building this project was to create a practical and efficient tool for task management. By developing this application, I aimed to enhance my skills in modern web development technologies and frameworks.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Purpose
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+I built this project to provide a simple yet powerful solution for managing daily tasks. It serves as a practical example of how to integrate various technologies and libraries to create a full-stack application.
 
-## Learn More
+## Problem Solved
 
-To learn more about Next.js, take a look at the following resources:
+This application addresses the common problem of task management by providing a user-friendly interface to keep track of todos. It helps users organize their tasks, set priorities, and ensure nothing is forgotten.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Learning Outcomes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Through this project, I learned how to:
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Develop a full-stack application using Next.js and React.
+- Integrate MySQL with a web application using Drizzle ORM.
+- Manage state and perform asynchronous operations with React Query and Axios.
+- Implement styling using TailwindCSS.
+- Write clean, maintainable code and follow best practices in modern web development.

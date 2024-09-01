@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm/mysql-core/expressions";
 export function DELETE(req: Request, { params }: { params: { id: string } }) {
     return db.delete(todos)
         .where(eq(todos.id, params.id))
-        .then(response => Response.json({ status: "success", message: "Todo deleted successfully" }))
+        .then(() => Response.json({ status: "success", message: "Todo deleted successfully" }))
         .catch(error => Response.json({ status: "error", message: (error as Error).message, }));
 }
 
